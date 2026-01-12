@@ -5,7 +5,9 @@ import com.example.moneymanager.entity.CategoryEntity;
 import com.example.moneymanager.entity.ProfileEntity;
 import com.example.moneymanager.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -13,8 +15,19 @@ public class CategoryService {
     private final ProfileService profileService;
     private final CategoryRepository categoryRepository;
 
-    //Helper Methods
 
+    public CategoryDto saveCategory(CategoryDto categoryDto) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        if(categoryRepository.existsByNameAndProfileId(categoryDto.getName(), profile.getId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Category of this name already exists");
+        }
+
+        CategoryEntity newCategory = toEntity(categoryDto, profile);
+        newCategory = categoryRepository.save(newCategory);
+        return toDto(newCategory);
+    }
+
+    //Helper Methods
     private CategoryEntity toEntity(CategoryDto categoryDto, ProfileEntity profileEntity) {
         return CategoryEntity.builder()
                 .name(categoryDto.getName())
@@ -24,7 +37,7 @@ public class CategoryService {
                 .build();
     }
 
-    private CategoryDto toDto(CategoryEntity categoryEntity, ProfileEntity profileEntity) {
+    private CategoryDto toDto(CategoryEntity categoryEntity) {
         return CategoryDto.builder()
                 .id(categoryEntity.getId())
                 .profileId(categoryEntity.getProfile() != null ? categoryEntity.getProfile().getId() : null)

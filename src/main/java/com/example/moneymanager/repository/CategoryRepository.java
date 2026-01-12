@@ -14,5 +14,5 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
     List<CategoryEntity> findByTypeAndProfileId(String type, String profileId);
 
-    Boolean existsByNameAndProfileId(String name, String profileId);
+    Boolean existsByNameAndProfileId(String name, Long profileId);
 }
