@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -25,6 +27,12 @@ public class CategoryService {
         CategoryEntity newCategory = toEntity(categoryDto, profile);
         newCategory = categoryRepository.save(newCategory);
         return toDto(newCategory);
+    }
+
+    public List<CategoryDto> getCategoriesForCurrentUser() {
+        ProfileEntity profile = profileService.getCurrentProfile(); //Spring context save the authenticated user
+        List<CategoryEntity> category = categoryRepository.findByProfileId(profile.getId());
+        return category.stream().map(this::toDto).toList();
     }
 
     //Helper Methods

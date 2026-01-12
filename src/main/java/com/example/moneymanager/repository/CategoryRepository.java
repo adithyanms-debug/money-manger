@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 
-    List<CategoryEntity> findByProfileId(String profileId);
+    List<CategoryEntity> findByProfileId(Long profileId);
 
     Optional<CategoryEntity> findByIdAndProfileId(String id, String profileId);
 
