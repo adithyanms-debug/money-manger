@@ -1,5 +1,6 @@
 package com.example.moneymanager.repository;
 
+import com.example.moneymanager.entity.CategoryEntity;
 import com.example.moneymanager.entity.ProfileEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
