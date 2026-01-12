@@ -1,5 +1,6 @@
 package com.example.moneymanager.dto;
 
+import com.example.moneymanager.entity.ProfileEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 public class CategoryDto {
     private Long id;
+
+    private Long profileId;
 
     private String name;
 
