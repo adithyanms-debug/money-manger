@@ -35,6 +35,16 @@ public class CategoryService {
         return categories.stream().map(this::toDto).toList();
     }
 
+    public CategoryDto updateCategory(Long categoryId, CategoryDto dto) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        CategoryEntity existingCategory = categoryRepository.findByIdAndProfileId(categoryId, profile.getId())
+                .orElseThrow(() -> new RuntimeException("Category was not found"));
+        existingCategory.setName(dto.getName());
+        existingCategory.setIcon(dto.getIcon());
+        existingCategory = categoryRepository.save(existingCategory);
+        return toDto(existingCategory);
+    }
+
     public List<CategoryDto> getCategoriesForCurrentUser() {
         ProfileEntity profile = profileService.getCurrentProfile(); //Spring context save the authenticated user
         List<CategoryEntity> category = categoryRepository.findByProfileId(profile.getId());
