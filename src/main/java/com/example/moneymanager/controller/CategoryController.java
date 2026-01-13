@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1.0/categories")
 @RequiredArgsConstructor
@@ -21,5 +23,10 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> saveCategory(@RequestBody CategoryDto categoryDto) {
         CategoryDto savedCategory = categoryService.saveCategory(categoryDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
+    }
+
+    public ResponseEntity<List<CategoryDto>> getCategory() {
+        List<CategoryDto> categories = categoryService.getCategoriesForCurrentUser();
+        return ResponseEntity.ok(categories);
     }
 }
