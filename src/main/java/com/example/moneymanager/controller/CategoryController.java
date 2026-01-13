@@ -3,6 +3,7 @@ package com.example.moneymanager.controller;
 import com.example.moneymanager.dto.CategoryDto;
 import com.example.moneymanager.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +27,11 @@ public class CategoryController {
     public ResponseEntity<List<CategoryDto>> getCategory() {
         List<CategoryDto> categories = categoryService.getCategoriesForCurrentUser();
         return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/{type}")
+    public ResponseEntity<List<CategoryDto>> getCategoriesByTypeForCurrentUser(@PathVariable String type) {
+        List<CategoryDto> list = categoryService.getCategoriesByTypeForCurrentUser(type);
+        return ResponseEntity.ok(list);
     }
 }

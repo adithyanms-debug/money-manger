@@ -29,6 +29,12 @@ public class CategoryService {
         return toDto(newCategory);
     }
 
+    public List<CategoryDto> getCategoriesByTypeForCurrentUser(String type) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<CategoryEntity> categories = categoryRepository.findByTypeAndProfileId(type, profile.getId());
+        return categories.stream().map(this::toDto).toList();
+    }
+
     public List<CategoryDto> getCategoriesForCurrentUser() {
         ProfileEntity profile = profileService.getCurrentProfile(); //Spring context save the authenticated user
         List<CategoryEntity> category = categoryRepository.findByProfileId(profile.getId());
