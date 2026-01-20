@@ -1,7 +1,6 @@
 package com.example.moneymanager.repository;
 
 import com.example.moneymanager.entity.ExpenseEntity;
-import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
 
-    List<ExpenseEntity> findByProfileIdOrderedByDateDesc(Long profileId);
+    List<ExpenseEntity> findByProfileIdOrderByDateDesc(Long profileId);
 
     List<ExpenseEntity> findTop5ByProfileIdOrderByDateDesc(Long profileId);
 
