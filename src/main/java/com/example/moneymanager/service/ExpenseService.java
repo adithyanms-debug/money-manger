@@ -6,7 +6,6 @@ import com.example.moneymanager.entity.ExpenseEntity;
 import com.example.moneymanager.entity.ProfileEntity;
 import com.example.moneymanager.repository.CategoryRepository;
 import com.example.moneymanager.repository.ExpenseRepository;
-import com.example.moneymanager.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
