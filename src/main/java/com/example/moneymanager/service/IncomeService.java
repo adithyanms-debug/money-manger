@@ -1,11 +1,10 @@
 package com.example.moneymanager.service;
 
-import com.example.moneymanager.dto.ExpenseDto;
 import com.example.moneymanager.dto.IncomeDto;
 import com.example.moneymanager.entity.CategoryEntity;
-import com.example.moneymanager.entity.ExpenseEntity;
 import com.example.moneymanager.entity.IncomeEntity;
 import com.example.moneymanager.entity.ProfileEntity;
+import com.example.moneymanager.repository.CategoryRepository;
 import com.example.moneymanager.repository.IncomeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,11 +12,21 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class IncomeService {
-    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
     private final IncomeRepository incomeRepository;
+    private final ProfileService profileService;
 
-    private ExpenseEntity toEntity(IncomeDto dto, ProfileEntity profile, CategoryEntity category) {
-        return ExpenseEntity.builder()
+    public IncomeDto addIncome(IncomeDto incomeDto) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        CategoryEntity category = categoryRepository.findById(incomeDto.getId())
+                .orElseThrow(() -> new RuntimeException("Category was not found"));
+        IncomeEntity newincome = toEntity(incomeDto, profile, category);
+        incomeRepository.save(newincome);
+        return toDto(newincome);
+    }
+
+    private IncomeEntity toEntity(IncomeDto dto, ProfileEntity profile, CategoryEntity category) {
+        return IncomeEntity.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .icon(dto.getIcon())
@@ -28,8 +37,8 @@ public class IncomeService {
                 .build();
     }
 
-    private ExpenseDto toDto(IncomeEntity entity) {
-        return ExpenseDto.builder()
+    private IncomeDto toDto(IncomeEntity entity) {
+        return IncomeDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .icon(entity.getIcon())
