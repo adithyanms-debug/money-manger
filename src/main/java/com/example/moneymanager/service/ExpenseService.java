@@ -19,7 +19,7 @@ public class ExpenseService {
 
     public ExpenseDto addExpense(ExpenseDto dto) {
         ProfileEntity profile = profileService.getCurrentProfile();
-        CategoryEntity category = categoryRepository.findById(dto.getId())
+        CategoryEntity category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         ExpenseEntity newExpense = toEntity(dto, profile, category);
         expenseRepository.save(newExpense);
