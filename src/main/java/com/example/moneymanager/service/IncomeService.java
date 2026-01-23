@@ -2,6 +2,7 @@ package com.example.moneymanager.service;
 
 import com.example.moneymanager.dto.IncomeDto;
 import com.example.moneymanager.entity.CategoryEntity;
+import com.example.moneymanager.entity.ExpenseEntity;
 import com.example.moneymanager.entity.IncomeEntity;
 import com.example.moneymanager.entity.ProfileEntity;
 import com.example.moneymanager.repository.CategoryRepository;
@@ -35,6 +36,15 @@ public class IncomeService {
         LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
         List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetween(profile.getId(), startDate, endDate);
         return list.stream().map(this::toDto).toList();
+    }
+
+    public void deleteIncome(Long id) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        IncomeEntity income = incomeRepository.findById(id).orElseThrow(() -> new RuntimeException("Income not found"));
+        if(!income.getId().equals(profile.getId())) {
+            throw new RuntimeException("Unauthorized to delete income");
+        }
+        incomeRepository.delete(income);
     }
 
     private IncomeEntity toEntity(IncomeDto dto, ProfileEntity profile, CategoryEntity category) {
