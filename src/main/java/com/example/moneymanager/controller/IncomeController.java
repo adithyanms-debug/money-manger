@@ -1,6 +1,5 @@
 package com.example.moneymanager.controller;
 
-import com.example.moneymanager.dto.ExpenseDto;
 import com.example.moneymanager.dto.IncomeDto;
 import com.example.moneymanager.service.IncomeService;
 import lombok.RequiredArgsConstructor;
