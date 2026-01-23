@@ -39,6 +39,15 @@ public class ExpenseService {
         return list.stream().map(this::toDto).toList();
     }
 
+    public void deleteExpense(Long id) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        ExpenseEntity expense = expenseRepository.findById(id).orElseThrow(() -> new RuntimeException("Expense not found"));
+        if(!expense.getProfile().getId().equals(profile.getId())) {
+            throw new RuntimeException("Unauthorized to delete this expense");
+        }
+        expenseRepository.delete(expense);
+    }
+
     private ExpenseEntity toEntity(ExpenseDto dto, ProfileEntity profile, CategoryEntity category) {
         return ExpenseEntity.builder()
                 .id(dto.getId())
