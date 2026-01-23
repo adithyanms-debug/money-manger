@@ -8,8 +8,10 @@ import com.example.moneymanager.entity.ProfileEntity;
 import com.example.moneymanager.repository.CategoryRepository;
 import com.example.moneymanager.repository.IncomeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,10 +43,29 @@ public class IncomeService {
     public void deleteIncome(Long id) {
         ProfileEntity profile = profileService.getCurrentProfile();
         IncomeEntity income = incomeRepository.findById(id).orElseThrow(() -> new RuntimeException("Income not found"));
-        if(!income.getId().equals(profile.getId())) {
+        if(!income.getProfile().getId().equals(profile.getId())) {
             throw new RuntimeException("Unauthorized to delete income");
         }
         incomeRepository.delete(income);
+    }
+
+    public List<IncomeDto> getTop5IncomeForCurrentUser() {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<IncomeEntity> list = incomeRepository.findByProfileIdOrderByDateDesc(profile.getId());
+        return list.stream().map(this::toDto).toList();
+    }
+
+    public BigDecimal getTotalIncomeForCurrentUser() {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        BigDecimal total = incomeRepository.findTotalExpenseByProfile(profile.getId());
+        return  total != null ? total : BigDecimal.ZERO;
+    }
+
+    //Filter income
+    public List<IncomeDto> filterIncomes(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(profile.getId(), startDate, endDate, keyword, sort);
+        return list.stream().map(this::toDto).toList();
     }
 
     private IncomeEntity toEntity(IncomeDto dto, ProfileEntity profile, CategoryEntity category) {
