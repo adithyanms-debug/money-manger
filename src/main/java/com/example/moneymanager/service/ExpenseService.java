@@ -95,6 +95,7 @@ public class ExpenseService {
                 .name(entity.getName())
                 .icon(entity.getIcon())
                 .categoryId(entity.getCategory() != null ? entity.getCategory().getId() : null)
+                .categoryName(entity.getCategory().getName())
                 .amount(entity.getAmount())
                 .date(entity.getDate())
                 .createdAt(entity.getCreatedAt())
