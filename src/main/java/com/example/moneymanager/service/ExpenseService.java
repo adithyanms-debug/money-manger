@@ -89,6 +89,7 @@ public class ExpenseService {
                 .build();
     }
 
+    //Something what user send or see, if anything related to not displaying happens check here
     private ExpenseDto toDto(ExpenseEntity entity) {
         return ExpenseDto.builder()
                 .id(entity.getId())
